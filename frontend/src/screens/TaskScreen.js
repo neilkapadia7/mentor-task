@@ -55,10 +55,11 @@ const TaskScreen = ({history}) => {
                 <Table striped bordered hover variant="dark">
                     <thead>
                         <tr>
-                            <th></th>
+                            <th>Complete</th>
                             <th>Task</th>
                             <th>Added By</th>
                             <th>Edit</th>
+                            <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>

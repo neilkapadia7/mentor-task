@@ -9,6 +9,9 @@ import {
     UPDATE_TASK_REQUEST,
     UPDATE_TASK_SUCCESS,
     UPDATE_TASK_FAIL,
+    DELETE_TASK_REQUEST,
+    DELETE_TASK_SUCCESS,
+    DELETE_TASK_FAIL,
 } from '../constants/taskConstants'
 
 export const TaskReducer = (state= {tasks: []}, action) => {
@@ -55,6 +58,22 @@ export const TaskReducer = (state= {tasks: []}, action) => {
                 tasks: state.tasks.length === 0 ? action.payload : state.tasks.map(task => task._id === action.payload._id ? action.payload : task)
             }
         case UPDATE_TASK_FAIL:
+            return {
+                loading: false,
+                error: action.payload,
+                tasks: state.tasks
+            }
+        case DELETE_TASK_REQUEST:
+            return {
+                loading: true,
+                tasks: state.tasks
+            }
+        case DELETE_TASK_SUCCESS:
+            return {
+                loading: false,
+                tasks: state.tasks.filter(task => task._id !== action.payload)
+            }
+        case DELETE_TASK_FAIL:
             return {
                 loading: false,
                 error: action.payload,

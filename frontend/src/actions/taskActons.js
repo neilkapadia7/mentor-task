@@ -8,6 +8,9 @@ import {
     UPDATE_TASK_REQUEST,
     UPDATE_TASK_SUCCESS,
     UPDATE_TASK_FAIL,
+    DELETE_TASK_REQUEST,
+    DELETE_TASK_SUCCESS,
+    DELETE_TASK_FAIL,
 } from '../constants/taskConstants'
 import axios from 'axios';
 
@@ -83,12 +86,38 @@ export const updateTask = (task) => async (dispatch, getState) => {
 
         const {data} = await axios.put(`/api/tasks/${task._id}`, task ,config);
 
-        console.log(data)
-
         dispatch({type: UPDATE_TASK_SUCCESS, payload: data});
     } catch (err) {
         dispatch({    
             type: UPDATE_TASK_FAIL,
+            payload: err.response && err.response.data.message
+            ? err.response.data.message
+            :  err.message
+        })
+    }   
+}
+
+
+export const deleteTask = (id) => async (dispatch, getState) => {
+    try {
+
+        dispatch({type: DELETE_TASK_REQUEST});
+
+        const {mentorLogin : {userInfo}} = getState();
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+
+        await axios.delete(`/api/tasks/${id}`, config);
+
+        dispatch({type: DELETE_TASK_SUCCESS, payload: id});
+    } catch (err) {
+        dispatch({    
+            type: DELETE_TASK_FAIL,
             payload: err.response && err.response.data.message
             ? err.response.data.message
             :  err.message
